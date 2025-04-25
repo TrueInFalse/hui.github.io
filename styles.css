@@ -1,0 +1,56 @@
+/* 全局样式 */
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* 优雅字体 */
+  max-width: 800px; /* 内容宽度，避免过宽 */
+  margin: 0 auto; /* 居中显示 */
+  padding: 20px;
+  line-height: 1.7; /* 舒适的行高 */
+  color: #333; /* 深灰色文字，比纯黑更易读 */
+}
+
+/* 标题样式 */
+h1, h2, h3, h4, h5, h6 {
+  color: #1a1a1a;
+  border-bottom: 2px solid #eee; /* 标题下方加浅灰色分隔线 */
+  padding-bottom: 8px;
+}
+h1 { font-size: 2.2rem; }
+h2 { font-size: 1.8rem; }
+h3 { font-size: 1.5rem; }
+
+/* 段落与列表 */
+p { margin: 15px 0; }
+ul, ol { padding-left: 25px; }
+li { margin: 8px 0; }
+
+/* 代码块 */
+pre code {
+  background-color: #f8f9fa; /* 浅灰色背景 */
+  padding: 15px;
+  border-radius: 8px; /* 圆角 */
+  display: block; /* 块级元素，自动换行 */
+  font-size: 0.95rem;
+  overflow-x: auto; /* 长代码出现滚动条 */
+}
+
+/* 链接样式 */
+a {
+  color: #2a6ce5; /* 蓝色链接 */
+  text-decoration: none;
+  border-bottom: 1px solid #e0f3ff; /* 鼠标悬停时显示下划线 */
+}
+a:hover { color: #1d52b0; }
+
+/* 图片样式（重要！让图片自适应宽度） */
+img {
+  max-width: 100%; /* 图片不超过父容器宽度 */
+  height: auto;
+  border-radius: 6px; /* 圆角 */
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1); /* 轻微阴影 */
+}
+
+/* 移动端适配（手机上更友好） */
+@media (max-width: 768px) {
+  body { padding: 10px; }
+  h1 { font-size: 1.8rem; }
+}
