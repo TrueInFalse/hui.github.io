@@ -1,6 +1,58 @@
 <!-- 引入自定义 CSS -->
 <link rel="stylesheet" href="styles.css">
 
+
+<!-- 引入CSS样式，美化目录 -->
+<style>
+  .sidebar {
+        float: left;
+        width: 20%;
+        margin-right: 20px;
+        padding: 10px;
+        border-right: 1px solid #eee;
+    }
+  .sidebar h3 {
+        margin-top: 0;
+        color: #333;
+    }
+  .sidebar ul {
+        list-style: none;
+        padding: 0;
+    }
+  .sidebar li {
+        margin: 8px 0;
+    }
+</style>
+
+<!-- 目录容器 -->
+<div class="sidebar">
+    <h3>目录</h3>
+    <ul id="toc"></ul>
+</div>
+
+<!-- JavaScript生成目录代码 -->
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const toc = document.getElementById('toc');
+        const headings = document.querySelectorAll('h2, h3'); // 可根据需求调整匹配的标题层级
+        headings.forEach(heading => {
+            const link = document.createElement('a');
+            link.href = '#' + heading.id;
+            link.textContent = heading.textContent;
+            const li = document.createElement('li');
+            li.appendChild(link);
+            toc.appendChild(li);
+            // 给标题添加id（如果没有的话）
+            if (!heading.id) {
+                heading.id = heading.textContent.toLowerCase().replace(/\W+/g, '-');
+            }
+        });
+    });
+</script>
+
+
+
+
 # 看到你了  
 
 ---
