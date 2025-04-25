@@ -1,5 +1,5 @@
 <!-- 引入自定义 CSS -->
-<link rel="stylesheet" href="/_includes/styles.css">
+<link rel="stylesheet" href="styles.css">
 
 # 看到你了  
 
