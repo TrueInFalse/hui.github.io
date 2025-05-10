@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>你的名字 | 个人网站</title>
+    <!-- 引入 Tailwind CSS（无需下载，直接用 CDN） -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- 引入 Font Awesome 图标 -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-50 min-h-screen">
+    <!-- 导航栏 -->
+    <nav class="bg-white shadow-lg">
+        <div class="container mx-auto px-4">
+            <div class="flex justify-between items-center py-4">
+                <a href="/" class="text-xl font-bold text-gray-800">你的名字</a>
+                <div class="flex space-x-4">
+                    <a href="/" class="text-gray-600 hover:text-blue-600 transition">首页</a>
+                    <a href="#projects" class="text-gray-600 hover:text-blue-600 transition">项目</a>
+                    <a href="about.html" class="text-gray-600 hover:text-blue-600 transition">关于</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 主内容区 -->
+    <main class="container mx-auto px-4 py-8">
+        <!-- 个人介绍卡片 -->
+        <div class="bg-white rounded-lg shadow-md p-6 mb-8">
+            <div class="flex items-center space-x-6">
+                <img src="images/avatar.jpg" alt="头像" class="w-24 h-24 rounded-full object-cover">
+                <div>
+                    <h1 class="text-2xl font-bold text-gray-800">你的名字</h1>
+                    <p class="text-gray-600 mt-2">前端开发者 | 开源爱好者 | 你的简介</p>
+                    <div class="mt-4 space-x-3">
+                        <a href="https://github.com/your-username" target="_blank" class="text-gray-500 hover:text-blue-600"><i class="fab fa-github fa-lg"></i></a>
+                        <a href="https://twitter.com/your-username" target="_blank" class="text-gray-500 hover:text-blue-600"><i class="fab fa-twitter fa-lg"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 项目展示 -->
+        <h2 id="projects" class="text-xl font-bold text-gray-800 mb-4">我的项目</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <!-- 项目卡片 1 -->
+            <div class="bg-white rounded-lg shadow-md p-4 hover:shadow-lg transition">
+                <h3 class="text-lg font-semibold text-gray-800">项目名称</h3>
+                <p class="text-gray-600 mt-2">项目简介：这是一个用 React 开发的待办事项应用，支持本地存储和云同步。</p>
+                <a href="https://github.com/your-username/project-repo" target="_blank" class="text-blue-600 mt-3 inline-block">查看代码 →</a>
+            </div>
+            <!-- 可复制多个项目卡片 -->
+        </div>
+    </main>
+
+    <!-- 页脚 -->
+    <footer class="bg-gray-800 text-white py-6 mt-8">
+        <div class="container mx-auto px-4 text-center">
+            <p>&copy; 2024 你的名字. 保留所有权利.</p>
+            <p class="mt-2 text-sm text-gray-400">Powered by GitHub Pages</p>
+        </div>
+    </footer>
+</body>
+</html>
