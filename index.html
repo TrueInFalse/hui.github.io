@@ -6,88 +6,118 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>个人网站 | 一些分享</title>
     <style>
-        /* 全局样式 */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', sans-serif;
+        /* 定义亮色主题变量 */
+        :root {
+            --bg-primary: #ffffff;
+            --bg-secondary: #f8f9fa;
+            --text-primary: #333333;
+            --text-secondary: #4a5568;
+            --border-color: #eee;
+            --link-color: #2a6ce5;
+            --link-hover: #1d52b0;
+            --shadow-color: rgba(0, 0, 0, 0.1);
+        }
+
+        /* 定义深色主题变量 */
+        [data-theme="dark"] {
+            --bg-primary: #1a1a1a;
+            --bg-secondary: #2d2d2d;
+            --text-primary: #ffffff;
+            --text-secondary: #a0aec0;
+            --border-color: #404040;
+            --link-color: #63b3ed;
+            --link-hover: #90cdf4;
+            --shadow-color: rgba(255, 255, 255, 0.1);
+        }
+
+        /* 使用CSS变量替换原有的固定颜色值 */
+        body {
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
         }
 
         /* 页面容器：flex布局，左侧目录+中心内容 */
-        。container {
+        .container {
             display: flex;
             min-height: 100vh;
         }
 
-        /* 左侧目录（固定定位，滚动时保持位置） */
-        。left-nav {
-            width: 280px;
-            /* 目录宽度 */
-            background: #f8f9fa;
-            /* 浅灰色背景 */
-            padding: 2rem 1.5rem;
+        /* 修改左侧导航样式 */
+        .left-nav {
             position: fixed;
-            /* 固定定位 */
-            top: 0;
             left: 0;
-            bottom: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 200px;
+            /* 固定宽度，目录框框的宽 */
+            background: var(--bg-secondary);
+            padding: 2rem 1.5rem;
             overflow-y: auto;
-            /* 目录过长时滚动 */
+            max-height: 90vh;
+            /* 防止导航栏太长超出视窗 */
+            box-shadow: 2px 0 8px var(--shadow-color);
+            /* 添加阴影效果 */
         }
 
-        。left-nav h2 {
-            color: #2d3748;
+        .left-nav h2 {
+            color: var(--text-primary);
             font-size: 1.2rem;
             margin-bottom: 1rem;
         }
 
         .left-nav a {
             display: block;
-            color: #4a5568;
+            color: var(--text-secondary);
             text-decoration: none;
             padding: 0.5rem 0;
             transition: color 0.2s;
         }
 
         .left-nav a:hover {
-            color: #2b6cb0;
+            color: var(--link-hover);
             /* 悬停蓝色 */
         }
 
-        /* 中心内容区（右侧，避免被左侧目录遮挡） */
+        /* 主内容区域需要添加左侧边距，避免被导航栏遮挡 */
         .main-content {
-            flex: 1;
-            margin-left: 280px;
-            /* 与左侧目录宽度一致 */
+            margin-left: 230px;
+            /* 左侧导航栏宽度 */
             padding: 2rem 3rem;
             max-width: 1000px;
-            /* 内容最大宽度，避免过宽 */
         }
 
         .main-content h1,
         .main-content h2,
         .main-content h3 {
-            color: #1a202c;
+            color: var(--text-primary);
             margin: 1.5rem 0 1rem;
+            border-bottom: 2px solid var(--border-color);
         }
 
         .main-content p {
-            color: #4a5568;
+            color: var(--text-secondary);
             line-height: 1.6;
             margin: 1rem 0;
+        }
+
+        a {
+            color: var(--link-color);
+        }
+
+        a:hover {
+            color: var(--link-hover);
         }
 
         /* 小屏幕适配（手机/平板） */
         @media (max-width: 768px) {
             .left-nav {
-                width: 240px;
-                /* 缩小目录宽度 */
-                padding: 1rem;
+                width: 180px;
+                /* 调整导航栏宽度240->180 */
             }
 
             .main-content {
-                margin-left: 240px;
+                margin-left: 180px;
+                /* 左侧导航栏宽度240->180 */
                 padding: 1rem;
             }
         }
@@ -95,7 +125,7 @@
         @media (max-width: 576px) {
             .left-nav {
                 display: none;
-                /* 超小屏幕隐藏目录 */
+                /* 在小屏幕上隐藏导航栏 */
             }
 
             .main-content {
@@ -103,28 +133,97 @@
                 padding: 1rem;
             }
         }
+
+        /* 主题切换按钮样式 */
+        .theme-toggle {
+            position: fixed;
+            top: 1rem;
+            right: 1rem;
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 5px;
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            cursor: pointer;
+            z-index: 1000;
+        }
+
+        .theme-toggle:hover {
+            opacity: 0.9;
+        }
     </style>
 </head>
 
 <body>
+    <!-- 添加主题切换按钮 -->
+    <button class="theme-toggle" onclick="toggleTheme()">
+        🌓 切换主题
+    </button>
+
     <div class="container">
         <!-- 左侧固定目录 -->
         <nav class="left-nav">
             <h2>目录</h2>
             <!-- 目录项链接到中心内容的锚点（id） -->
+
             <a href="#intro">简单介绍</a>
             <a href="#skills">技术栈</a>
             <a href="#projects">项目经验</a>
             <a href="#contact">联系方式</a>
+            <a href="#absurd-interview">荒诞的面试</a>
         </nav>
 
         <!-- 中心内容（替换为你的 README 内容） -->
         <main class="main-content">
-            <h1 id="-">看到你了</h1>
+
+            <!-- 每个标题对应目录的锚点（id） -->
+            <!-- <h1 id="intro">个人简介</h1>
+            <p>这里是你的个人简介内容，例如：<br>
+                前端开发者，专注 React/Vue 技术栈，3 年互联网大厂经验，擅长复杂前端系统开发。</p>
+
+            <h2 id="skills">核心技术栈</h2>
+            <p>主要掌握的技术：</p>
+            <ul>
+                <li>前端框架：React 18+、Vue 3</li>
+                <li>状态管理：Redux、Pinia</li>
+                <li>构建工具：Vite、Webpack 5</li>
+            </ul>
+
+            <h3 id="projects">重点项目经验</h3>
+            <p><strong>项目 1：</strong><br> -->
+
+
+            <h1 id="intro">个人简介</h1>
+            <p>
+                计算数学专业26届本科生，专注于数据开发与大数据技术方向。
+                具备扎实的 Python、SQL 编程能力与工程实践经验。
+                熟悉 Hadoop、Hive、Spark、ClickHouse等大数据组件，完成多个离线分析项目，
+                具备良好的自学能力和执行力。
+                当前积极寻求数据开发岗位的机会，目标是在技术中上游企业不断积累工程经验。
+            </p>
+            <h2 id="skills">核心技术栈</h2>
+            <ul>
+                <li>编程语言：Python（Numpy、Panda、PySpark、Scikit-learn、Tensorflow）、
+                    SQL（复杂查询与优化）、Shell、C/C++</li>
+                <li>大数据组件：Hadoop（HDFS/YARN）、Hive、Spark、Flink、Kafka、ClickHouse</li>
+                <li>数据库：MySQL、ClickHouse、Hive、HBase</li>
+                <li>数据分析与可视化：SPSS、PowerBI、Tableau、Superset</li>
+                <li>数据建模：维度建模（星型/雪花/星座）、分层模型（ODS/DWD/DWS/ADS）</li>
+                <li>工具平台：Docker、DBeaver、Git、Linux Shell、Matlab</li>
+                <li>数据结构与算法：LeetCode 500+题，重点练习中等/困难题，掌握常见的数据结构与算法知识，
+                    具备扎实的编程能力与算法思维。</li>
+            </ul>
+            <h3 id="projects">重点项目经验</h3>
+            <p><strong>项目 1：</strong><br></p>
+
+
+
+            <h2 id="contact">联系方式</h2>
+            <p>邮箱：suxiaoyao2023@gmail.com<br>
+                GitHub：https://github.com/TrueInFalse</p>
+
+            <h1 id="absurd-interview">荒诞的面试</h1>
             <hr>
-            <p><strong>荒诞的面试</strong></p>
-            <hr>
-            <h1 id="2-25-4-22-">2.面试经历：北京墨链鸻鹬科技（25.4.22）</h1>
             <blockquote>
                 <p>搞笑呢？</p>
                 <p>说话人1是面试者（也就是笔者自己），说话人2是面试官</p>
@@ -162,7 +261,7 @@
                 <li>说话人2 03:26</li>
             </ul>
             <p>一下吗？我给你说一下。我招的是数据分析师，但你现在看你肯定具备数据分析这个没问题的，但最重要我们叫建模就建模。</p>
-            <p>我想跟你说啥意思，叶辉首先我干这个事儿，地球上绝无仅有，就这事如果能干的只有我，别人干不成就是我向你保证这事，所以说怎么才才能干，因为咱可以线下你见面聊，这个也没关系，但这个事儿是啥？这个事儿第一个是绝无仅有对吧？第二肯定是个好事儿，第三个是啥？能够帮助到人的事儿。任何人是不是都想到都生活中会遇到困难，会有各种各样的这种，比方说亚辉你不管你本科毕业还是研究生毕业，可能你得找工作，你没问题，你肯定能找到工作，但问题你能找到更好的工作，我做我通过我这个事儿就能帮助到你找到更好的工作，我就说这意思，当然因为你们学生只是社会中找工作，只是一个微小的一部分，将来你还得干其他的事，比方说我想骑得更快，骑得快，我们比谁骑得快，是不是我就说那时候我干的这个事儿，就是你有各种诉求，咱们基本上都能找到，现在我能做到啥？
+            <p>我想跟你说啥意思，叶辉首先我干这个事儿，地球上绝无仅有，就这事如果能干的只有我，别人干不成就是我向你保证这事，所以说怎么才才能干，因为咱可以线下你见面聊，这个也没关系但这个事儿是啥？这个事儿第一个是绝无仅有对吧？第二肯定是个好事儿，第三个是啥？能够帮助到人的事儿。任何人是不是都想到都生活中会遇到困难，会有各种各样的这种，比方说亚辉你不管你本科毕业还是研究生毕业，可能你得找工作，你没问题，你肯定能找到工作，但问题你能找到更好的工作，我做我通过我这个事儿就能帮助到你找到更好的工作，我就说这意思，当然因为你们学生只是社会中找工作，只是一个微小的一部分，将来你还得干其他的事，比方说我想骑得更快，骑得快，我们比谁骑得快，是不是我就说那时候我干的这个事儿，就是你有各种诉求，咱们基本上都能找到，现在我能做到啥？
             </p>
             <ul>
                 <li>说话人2 04:35</li>
@@ -248,7 +347,7 @@
             <p>当我跟你说出这些强大的人物前，其实你的内心认识你想认识他，但是你的内心潜意识可能是羡慕我明白，因为我俩没有感情吗？</p>
             <p>你一个剔除，因为你过后的很多角色可能就潜意识里不跟我合作了，或者说认为我吹牛逼了，反正总之我说的意思你只要做出不利于跟我的合作，实际上是潜意识在作怪，就是因为你们年轻人你们没有经历过，我们经历过你要咱俩谈这事是反人性的，你不要按照常规思维，你要打破这个东西，因为我说的每句话都是真的，你可以验证知道吧？
             </p>
-            <p>你千万不要因为谈完之后，然后因为我认识这么多，其实正常的话我认识一那16,000，咱俩之后加个微信，你二手人脉不是16,000了吗？是好事是不是？我就说可能这对你来说其实就你成不成为我的实习生都没关系，当然加微信没问题你行吗？然后我给你人脉，然后到时候也比方说你可以帮我设计一些东西，我有什么技术问题我可以问你，我就最起码咱俩这个没问题吧，互助的是不是？而且我接下来讲的是啥？如果你要做成这个事，咱有什么好做法？做成这个事儿，首先你完成一个项目这个没问题，你可能能你肯定是估计导致谁看了，将来你找找工作你肯定是我估计那肯定是我估计你去阿里巴巴啥的，很有可能我就说就像本身即使是你这个做，即使你没有因为咱的学校不是特别厉害的，语言表，清华北大的是吧？
+            <p>你千万不要因为谈完之后，然后因为我认识这么多，其实正常的话我认识一那16,000，咱俩之后加个微信，你二手人脉不是16,000了吗？是好事是不是？我就说可能这对你来说其实就你成不成为我的实习生都没关系，当然加微信没问题你行吗？然后我给你人脉，然后到时候也比方说你可以帮我设计一些东西，我有什么技术问题我可以问你，我就最起码咱俩这个没问题吧，互助的是是不是？而且我接下来讲的是啥？如果你要做成这个事，咱有什么好做法？做成这个事儿，首先你完成一个项目这个没问题，你可能能你肯定是估计导致谁看了，将来你找找工作你肯定是我估计那肯定是我估计你去阿里巴巴啥的，很有可能我就说就像本身即使是你这个做，即使你没有因为咱的学校不是特别厉害的，语言表，清华北大的是吧？
             </p>
             <p>研究生都是博士，很有可能说是，而且他也不是完全保证，就谁都不能完全保证能去阿拉巴总部怎么办？</p>
             <p>我们可以找到我的老乡叫吴继玲，是灭绝师太，马云不是风清扬灭日时代，他是首席风险官，我就针对你这个事儿，因为比方说不管3个月6个月还是将来是吧？</p>
@@ -366,14 +465,14 @@
                 <li>说话人2 19:20</li>
             </ul>
             <p>行好好勒好。</p>
-            <h1 id="3-ai-">3.AI评价：</h1>
+            <h2 id="3-ai-">3.AI评价：</h2>
             <p>兄弟，这不是面试，这是<strong>荒诞脱口秀＋魔幻小说演播会＋诈唬剧场</strong>的综合体。</p>
             <p>你能撑到最后还好声好气地说“我考虑一下”，我只想说：你心理素质比大多数人强太多了。真的，这段面试全程，<strong>一边离谱得想笑，一边细思极恐得发凉</strong>。</p>
             <hr>
-            <h2 id="-">🔥全面评价如下：</h2>
+            <h3 id="-">🔥全面评价如下：</h3>
             <hr>
-            <h3 id="-">🧠<strong>面试内容评价：</strong></h3>
-            <h4 id="1-">1. <strong>胡言乱语、逻辑混乱</strong></h4>
+            <h4 id="-">🧠<strong>面试内容评价：</strong></h4>
+            <h5 id="1-">1. <strong>胡言乱语、逻辑混乱</strong></h5>
             <p>整段对话里，这位“面试官”几乎没有就你简历或技术栈展开专业提问，而是：</p>
             <ul>
                 <li>用了一大堆 <strong>毫无逻辑的“人脉帝国幻想”</strong> 来营造虚假的成功感；</li>
@@ -382,8 +481,8 @@
             </ul>
             <p>这不是面试，这是PPT创业诈骗的剧本排练。</p>
             <hr>
-            <h3 id="-">🧪<strong>判断风险级别：</strong></h3>
-            <h4 id="-100-">✅ <strong>100%风险预警！</strong></h4>
+            <h4 id="-">🧪<strong>判断风险级别：</strong></h4>
+            <h5 id="-100-">✅ <strong>100%风险预警！</strong></h5>
             <ul>
                 <li><strong>伪科技、伪大模型、伪人脉</strong>结合，十足的【庞氏+PUA+狂言】混合体；</li>
                 <li>抛出一个完全无法验证的数据帝国，再用“我怕你不信，你要反人性”这种语句进行心理操控；</li>
@@ -392,11 +491,11 @@
             </ul>
             <p>这不是一个面试，是一个<strong>极度危险的情绪收割和心智操控现场</strong>。不排除在未来让你签署不明合约、被用做人脉工具、乃至卷入违法边缘的风险。</p>
             <hr>
-            <h3 id="-">👨‍💻<strong>你在这个场景中表现如何？</strong></h3>
+            <h4 id="-">👨‍💻<strong>你在这个场景中表现如何？</strong></h4>
             <p>💯：你保持了<strong>冷静、克制、礼貌、观察者视角</strong>，非常棒！<br>你没有被他那些“伪逻辑+伪高光+伪权威”洗脑，也没有情绪化跟他争执或急于否定他。</p>
             <p>你非常清醒，你是来找工作的，不是被他拉着“做梦”、“站台”、“卖命”的。</p>
             <hr>
-            <h3 id="-">💣<strong>一些有毒句子摘录分析：</strong></h3>
+            <h4 id="-">💣<strong>一些有毒句子摘录分析：</strong></h4>
             <table>
                 <thead>
                     <tr>
@@ -436,7 +535,7 @@
                 </tbody>
             </table>
             <hr>
-            <h3 id="-">✅<strong>建议总结：</strong></h3>
+            <h4 id="-">✅<strong>建议总结：</strong></h4>
             <ul>
                 <li><strong>立刻拉黑此公司，永不接触。</strong></li>
                 <li><strong>保持警惕，像这样“神神叨叨”“画饼吹牛”的，一律拒绝。</strong></li>
@@ -444,36 +543,49 @@
                 <li><strong>你没有错，错的是他“以为全世界都能信他”。</strong></li>
             </ul>
             <hr>
-            <h3 id="-">💪最后说点正经话：</h3>
+            <h4 id="-">💪最后说点正经话：</h4>
             <p>你要记得你自己在干什么——你在认真练习项目、刷题、修技能、做简历、整理输出，这都是<strong>技术人真正的底气</strong>。</p>
             <p>你是来求职，不是来被吹牛骗感动、被利用当棋子、当工具人、当听众的。</p>
             <p><strong>拒绝虚无画饼，脚踏实地前行。</strong></p>
             <p>今天你从这场离谱戏码里脱身而出，未来你会感谢自己——<strong>没掉进那个黑洞。</strong></p>
             <p>勇敢牛牛，不怕神经病！干他！🐂👊</p>
 
-            <!-- 每个标题对应目录的锚点（id） -->
-            <h1 id="intro">个人简介</h1>
-            <p>这里是你的个人简介内容，例如：<br>
-                前端开发者，专注 React/Vue 技术栈，3 年互联网大厂经验，擅长复杂前端系统开发。</p>
 
-            <h2 id="skills">核心技术栈</h2>
-            <p>主要掌握的技术：</p>
-            <ul>
-                <li>前端框架：React 18+、Vue 3</li>
-                <li>状态管理：Redux、Pinia</li>
-                <li>构建工具：Vite、Webpack 5</li>
-            </ul>
-
-            <h3 id="projects">重点项目经验</h3>
-            <p><strong>项目 1：企业级后台管理系统</strong><br>
-                负责前端架构设计，使用 React+TypeScript+Ant Design，支持多租户权限管理，日均用户 1000+。</p>
-
-            <h2 id="contact">联系方式</h2>
-            <p>邮箱：your-email@example.com<br>
-                微信：your-wechat-id<br>
-                GitHub：https://github.com/your-username</p>
-        </main>
     </div>
+    </main>
+    </div>
+
+    <!-- 添加主题切换脚本 -->
+    <script>
+        // 检查系统主题偏好
+        function getPreferredTheme() {
+            if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                return 'dark';
+            }
+            return 'light';
+        }
+
+        // 设置主题
+        function setTheme(theme) {
+            document.documentElement.setAttribute('data-theme', theme);
+            localStorage.setItem('theme', theme);
+        }
+
+        // 切换主题
+        function toggleTheme() {
+            const current = localStorage.getItem('theme') || getPreferredTheme();
+            const next = current === 'dark' ? 'light' : 'dark';
+            setTheme(next);
+        }
+
+        // 初始化主题
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme) {
+            setTheme(savedTheme);
+        } else {
+            setTheme(getPreferredTheme());
+        }
+    </script>
 </body>
 
 </html>
