@@ -4,7 +4,28 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>个人网站 | 一些分享</title>
+    <!-- 添加这段脚本在最前面 -->
+    <script>
+        // 在页面加载前就执行主题初始化
+        (function() {
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme) {
+                document.documentElement.setAttribute('data-theme', savedTheme);
+            } else {
+                const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+                document.documentElement.setAttribute('data-theme', prefersDark ? 'dark' : 'light');
+            }
+        })();
+    </script>
     <link rel="stylesheet" href="styles.css">
+    <!-- 添加 Prism.js -->
+    <link href="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/prism.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-python.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-javascript.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-java.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-sql.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-bash.min.js"></script>
 </head>
 <body>
     <!-- 主题切换按钮 -->
@@ -49,6 +70,10 @@
     <!-- 遮罩层 -->
     <div class="overlay" onclick="toggleMenu()"></div>
 
-    <!-- ...existing code... -->
+    <!-- 回到顶部按钮 -->
+    <button class="back-to-top" onclick="scrollToTop()" title="回到顶部">
+        ↑
+    </button>
+
 </body>
 </html>

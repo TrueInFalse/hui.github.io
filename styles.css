@@ -183,6 +183,37 @@ body {
     z-index: 999;
 }
 
+/* 进度条 */
+.progress-bar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 0;
+    height: 3px;
+    background: var(--link-color);
+    z-index: 1003;
+    transition: width 0.2s;
+}
+
+/* 修改回到顶部按钮样式 */
+.back-to-top {
+    display: none; /* 默认隐藏 */
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+    width: 40px;
+    height: 40px;
+    border: none;
+    border-radius: 50%;
+    background: var(--bg-secondary);
+    color: var(--text-primary);
+    cursor: pointer;
+    box-shadow: 0 2px 8px var(--shadow-color);
+    opacity: 0;
+    transition: opacity 0.3s;
+    z-index: 1000;
+}
+
 /* 响应式设计 */
 @media screen and (max-width: 768px) {
     /* 导航按钮显示 */
@@ -255,6 +286,22 @@ body {
         text-align: center;
         box-shadow: 0 -2px 8px var(--shadow-color);
     } */
+
+    /* 只在移动端显示回到顶部按钮 */
+    .back-to-top {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.2rem;
+    }
+
+    .back-to-top.show {
+        opacity: 0.8;
+    }
+
+    .back-to-top:hover {
+        opacity: 1;
+    }
 }
 
 /* 超小屏幕适配 */

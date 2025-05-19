@@ -20,13 +20,27 @@ const posts = [
 // 加载文章内容
 async function loadPost(postId) {
     try {
-        const post = posts.find(p => p.id === postId) || posts[0]; // 如果找不到文章，加载第一篇
+        const post = posts.find(p => p.id === postId) || posts[0];
         const response = await fetch(`posts/${post.file}`);
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
         const text = await response.text();
-        document.getElementById('content').innerHTML = marked.parse(text); // 使用 marked.parse
+        
+        // 配置 marked 以使用 Prism.js
+        marked.setOptions({
+            highlight: function(code, lang) {
+                if (lang && Prism.languages[lang]) {
+                    return Prism.highlight(code, Prism.languages[lang], lang);
+                }
+                return code;
+            }
+        });
+        
+        document.getElementById('content').innerHTML = marked.parse(text);
+        
+        // 手动触发 Prism.js 高亮
+        Prism.highlightAll();
     } catch (err) {
         console.error('Error loading post:', err);
         document.getElementById('content').innerHTML = `<p>加载文章失败: ${err.message}</p>`;
@@ -43,7 +57,7 @@ function generateMenu() {
 
 // 主题切换
 function toggleTheme() {
-    const current = localStorage.getItem('theme') || getPreferredTheme();
+    const current = document.documentElement.getAttribute('data-theme') || 'light';
     const next = current === 'dark' ? 'light' : 'dark';
     setTheme(next);
 }
@@ -96,6 +110,24 @@ function updateVisitStats() {
     `;
 }
 
+// 添加回到顶部功能
+function scrollToTop() {
+    window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+    });
+}
+
+// 控制回到顶部按钮显示/隐藏
+window.addEventListener('scroll', () => {
+    const backToTop = document.querySelector('.back-to-top');
+    if (window.scrollY > 300) { // 滚动超过300px显示按钮
+        backToTop.classList.add('show');
+    } else {
+        backToTop.classList.remove('show');
+    }
+});
+
 // 初始化页面
 document.addEventListener('DOMContentLoaded', () => {
     generateMenu();
@@ -103,9 +135,15 @@ document.addEventListener('DOMContentLoaded', () => {
     countVisits();
     
     // 初始化主题
-    const savedTheme = localStorage.getItem('theme');
-    setTheme(savedTheme || getPreferredTheme());
     console.log('页面初始化完成');
+});
+
+// 监听系统主题变化
+window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
+    // 只有在用户没有手动设置主题时才跟随系统
+    if (!localStorage.getItem('theme')) {
+        setTheme(e.matches ? 'dark' : 'light');
+    }
 });
 
 // 监听URL变化
@@ -113,9 +151,6 @@ window.addEventListener('hashchange', () => {
     const hash = window.location.hash.slice(1);
     loadPost(hash);
 });
-
-
-// ...existing code...
 
 // 移动端导航控制
 function toggleMenu() {
