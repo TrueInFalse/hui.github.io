@@ -146,8 +146,6 @@ body {
     }
 }
 
-/* ...existing code... */
-
 /* 移动端导航按钮 */
 .menu-toggle {
     display: none; /* 默认隐藏 */
@@ -186,7 +184,7 @@ body {
     /* 左侧导航样式调整 */
     .left-nav {
         position: fixed;
-        left: -240px; /* 默认隐藏 */
+        left: -240px;
         top: 0;
         bottom: 0;
         width: 240px;
@@ -194,6 +192,7 @@ body {
         transform: none;
         transition: left 0.3s ease;
         z-index: 1000;
+        background: var(--bg-secondary);
         padding: 4rem 1rem 1rem;
     }
 

@@ -9,6 +9,11 @@ const posts = [
         id: 'absurd-interview',
         title: '荒诞的面试',
         file: 'absurd-interview.md'
+    },
+    {
+        id: 'interview-yunzhi-2504',
+        title: '2504暑期云智面试',
+        file: 'interview-yunzhi-2504.md'
     }
 ];
 
