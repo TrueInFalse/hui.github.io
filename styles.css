@@ -75,6 +75,110 @@ body {
     margin-left: 200px;
     padding: 2rem 3rem;
     max-width: 1000px;
+
+    /* 标题样式 */
+    h1, h2, h3, h4, h5, h6 {
+        margin-top: 1.5em;
+        margin-bottom: 1em;
+        font-weight: 600;
+        line-height: 1.25;
+    }
+
+    /* 段落样式 */
+    p {
+        margin: 1em 0;
+        line-height: 1.7;
+    }
+
+    /* 引用块样式 */
+    blockquote {
+        margin: 1em 0;
+        padding: 0.5em 1em;
+        border-left: 4px solid var(--link-color);
+        background: var(--bg-secondary);
+        color: var(--text-secondary);
+    }
+
+    /* 列表样式 */
+    ul, ol {
+        margin: 1em 0;
+        padding-left: 2em;
+    }
+
+    li {
+        margin: 0.5em 0;
+    }
+
+    /* 代码块样式 */
+    pre {
+        margin: 1em 0;
+        padding: 1em;
+        border-radius: 4px;
+        background: var(--bg-secondary) !important;
+        overflow-x: auto;
+    }
+
+    code {
+        font-family: 'Consolas', 'Monaco', 'Andale Mono', monospace;
+        font-size: 0.9em;
+        padding: 0.2em 0.4em;
+        border-radius: 3px;
+        background: var(--bg-secondary);
+    }
+
+    pre code {
+        padding: 0;
+        background: none;
+    }
+
+    /* 表格样式 */
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 1em 0;
+    }
+
+    th, td {
+        padding: 0.5em;
+        border: 1px solid var(--border-color);
+    }
+
+    th {
+        background: var(--bg-secondary);
+    }
+
+    /* 图片样式 */
+    img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 1em auto;
+        border-radius: 4px;
+    }
+
+    /* 水平线样式 */
+    hr {
+        margin: 2em 0;
+        border: none;
+        border-top: 2px solid var(--border-color);
+    }
+
+    /* 链接样式 */
+    a {
+        color: var(--link-color);
+        text-decoration: none;
+        transition: color 0.2s;
+    }
+
+    a:hover {
+        color: var(--link-hover);
+    }
+
+    /* 行内代码样式 */
+    :not(pre) > code {
+        color: #e83e8c;
+        word-break: break-word;
+    }
 }
 
 /* 文章样式 */
