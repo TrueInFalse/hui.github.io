@@ -108,3 +108,33 @@ window.addEventListener('hashchange', () => {
     const hash = window.location.hash.slice(1);
     loadPost(hash);
 });
+
+
+// ...existing code...
+
+// 移动端导航控制
+function toggleMenu() {
+    const nav = document.querySelector('.left-nav');
+    const overlay = document.querySelector('.overlay');
+    
+    if (nav.classList.contains('show')) {
+        nav.classList.remove('show');
+        overlay.classList.remove('show');
+        document.body.style.overflow = '';
+    } else {
+        nav.classList.add('show');
+        overlay.classList.add('show');
+        document.body.style.overflow = 'hidden';
+    }
+}
+
+// 窗口大小变化监听
+window.addEventListener('resize', () => {
+    if (window.innerWidth > 768) {
+        const nav = document.querySelector('.left-nav');
+        const overlay = document.querySelector('.overlay');
+        nav?.classList.remove('show');
+        overlay?.classList.remove('show');
+        document.body.style.overflow = '';
+    }
+});
