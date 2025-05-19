@@ -2,7 +2,7 @@
 const posts = [
     {
         id: 'intro',
-        title: '个人简介',
+        title: 'HOME&简介',
         file: 'intro.md'
     },
     {
@@ -27,14 +27,21 @@ async function loadPost(postId) {
         }
         const text = await response.text();
         
-        // 配置 marked 以使用 Prism.js
+        // 配置 marked 选项
         marked.setOptions({
+            gfm: true, // 启用 GitHub 风格的 Markdown
+            breaks: true, // 允许回车换行
             highlight: function(code, lang) {
                 if (lang && Prism.languages[lang]) {
                     return Prism.highlight(code, Prism.languages[lang], lang);
                 }
                 return code;
-            }
+            },
+            headerIds: true, // 为标题添加 id
+            mangle: false, // 不转义内联 HTML
+            pedantic: false, // 尽可能地兼容 markdown.pl
+            smartLists: true, // 使用更智能的列表行为
+            smartypants: true // 使用更智能的标点符号
         });
         
         document.getElementById('content').innerHTML = marked.parse(text);
