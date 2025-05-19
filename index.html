@@ -151,6 +151,34 @@
         .theme-toggle:hover {
             opacity: 0.9;
         }
+
+        /* 添加统计显示器样式 */
+        .visit-stats {
+            position: fixed;
+            bottom: 1rem;
+            right: 1rem;
+            background: var(--bg-secondary);
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            box-shadow: 0 2px 8px var(--shadow-color);
+            z-index: 1000;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        .stat-item {
+            display: inline-block;
+            margin: 0 0.5rem;
+        }
+
+        @media (max-width: 576px) {
+            .visit-stats {
+                bottom: 0.5rem;
+                right: 0.5rem;
+                font-size: 0.8rem;
+                padding: 0.3rem 0.8rem;
+            }
+        }
     </style>
 </head>
 
@@ -555,6 +583,16 @@
     </main>
     </div>
 
+    <!-- 添加统计显示器 HTML -->
+    <div id="visitStats" class="visit-stats">
+        <div class="stat-item">
+            <span>PV: 0</span>
+        </div>
+        <div class="stat-item">
+            <span>UV: 0</span>
+        </div>
+    </div>
+
     <!-- 添加主题切换脚本 -->
     <script>
         // 检查系统主题偏好
@@ -585,7 +623,62 @@
         } else {
             setTheme(getPreferredTheme());
         }
+
+        // 访问统计功能
+        function countVisits() {
+            // 获取当前时间戳
+            const now = new Date().getTime();
+            
+            // 统计 PV (Page Views) - 每次访问都计数
+            let pageViews = localStorage.getItem('pageViews') || 0;
+            pageViews = parseInt(pageViews) + 1;
+            localStorage.setItem('pageViews', pageViews);
+
+            // 统计 UV (Unique Visitors) - 使用访客ID和24小时判断
+            let visitorId = localStorage.getItem('visitorId');
+            let lastVisitTime = localStorage.getItem('lastVisitTime');
+            
+            if (!visitorId) {
+                // 新访客
+                visitorId = 'visitor_' + Math.random().toString(36).substr(2, 9);
+                localStorage.setItem('visitorId', visitorId);
+                let uniqueVisitors = localStorage.getItem('uniqueVisitors') || 0;
+                uniqueVisitors = parseInt(uniqueVisitors) + 1;
+                localStorage.setItem('uniqueVisitors', uniqueVisitors);
+            } else if (lastVisitTime && (now - parseInt(lastVisitTime)) > 24 * 60 * 60 * 1000) {
+                // 老访客，但超过24小时算新UV
+                let uniqueVisitors = localStorage.getItem('uniqueVisitors') || 0;
+                uniqueVisitors = parseInt(uniqueVisitors) + 1;
+                localStorage.setItem('uniqueVisitors', uniqueVisitors);
+            }
+            
+            // 更新最后访问时间
+            localStorage.setItem('lastVisitTime', now);
+
+            // 显示统计数据
+            updateVisitStats();
+        }
+
+        // 更新统计显示
+        function updateVisitStats() {
+            const pageViews = localStorage.getItem('pageViews') || 0;
+            const uniqueVisitors = localStorage.getItem('uniqueVisitors') || 0;
+            
+            // 更新统计显示器的内容
+            document.getElementById('visitStats').innerHTML = `
+                <div class="stat-item">
+                    <span>PV: ${pageViews}</span>
+                </div>
+                <div class="stat-item">
+                    <span>UV: ${uniqueVisitors}</span>
+                </div>
+            `;
+        }
+
+        // 页面加载时调用统计函数
+        document.addEventListener('DOMContentLoaded', countVisits);
     </script>
+
 </body>
 
 </html>
