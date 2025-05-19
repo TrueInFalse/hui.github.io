@@ -1,56 +1,147 @@
-/* 全局样式 */
+/* 主题变量 */
+:root {
+    --bg-primary: #ffffff;
+    --bg-secondary: #f8f9fa;
+    --text-primary: #333333;
+    --text-secondary: #4a5568;
+    --border-color: #eee;
+    --link-color: #2a6ce5;
+    --link-hover: #1d52b0;
+    --shadow-color: rgba(0, 0, 0, 0.1);
+}
+
+/* 深色主题 */
+[data-theme="dark"] {
+    --bg-primary: #1a1a1a;
+    --bg-secondary: #2d2d2d;
+    --text-primary: #ffffff;
+    --text-secondary: #a0aec0;
+    --border-color: #404040;
+    --link-color: #63b3ed;
+    --link-hover: #90cdf4;
+    --shadow-color: rgba(255, 255, 255, 0.1);
+}
+
+/* 基础样式 */
 body {
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* 优雅字体 */
-  max-width: 800px; /* 内容宽度，避免过宽 */
-  margin: 0 auto; /* 居中显示 */
-  padding: 20px;
-  line-height: 1.7; /* 舒适的行高 */
-  color: #333; /* 深灰色文字，比纯黑更易读 */
+    margin: 0;
+    padding: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+    line-height: 1.6;
 }
 
-/* 标题样式 */
-h1, h2, h3, h4, h5, h6 {
-  color: #1a1a1a;
-  border-bottom: 2px solid #eee; /* 标题下方加浅灰色分隔线 */
-  padding-bottom: 8px;
-}
-h1 { font-size: 2.2rem; }
-h2 { font-size: 1.8rem; }
-h3 { font-size: 1.5rem; }
-
-/* 段落与列表 */
-p { margin: 15px 0; }
-ul, ol { padding-left: 25px; }
-li { margin: 8px 0; }
-
-/* 代码块 */
-pre code {
-  background-color: #f8f9fa; /* 浅灰色背景 */
-  padding: 15px;
-  border-radius: 8px; /* 圆角 */
-  display: block; /* 块级元素，自动换行 */
-  font-size: 0.95rem;
-  overflow-x: auto; /* 长代码出现滚动条 */
+/* 布局容器 */
+.container {
+    display: flex;
+    min-height: 100vh;
 }
 
-/* 链接样式 */
-a {
-  color: #2a6ce5; /* 蓝色链接 */
-  text-decoration: none;
-  border-bottom: 1px solid #e0f3ff; /* 鼠标悬停时显示下划线 */
-}
-a:hover { color: #1d52b0; }
-
-/* 图片样式（重要！让图片自适应宽度） */
-img {
-  max-width: 100%; /* 图片不超过父容器宽度 */
-  height: auto;
-  border-radius: 6px; /* 圆角 */
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1); /* 轻微阴影 */
+/* 左侧导航 */
+.left-nav {
+    position: fixed;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 200px;
+    background: var(--bg-secondary);
+    padding: 1.5rem 1rem;
+    overflow-y: auto;
+    max-height: 90vh;
+    box-shadow: 2px 0 8px var(--shadow-color);
 }
 
-/* 移动端适配（手机上更友好） */
+.left-nav h2 {
+    color: var(--text-primary);
+    font-size: 1.2rem;
+    margin-bottom: 1rem;
+}
+
+.left-nav a {
+    display: block;
+    color: var(--text-secondary);
+    text-decoration: none;
+    padding: 0.5rem 0;
+    transition: color 0.2s;
+}
+
+.left-nav a:hover {
+    color: var(--link-hover);
+}
+
+/* 主内容区域 */
+.main-content {
+    margin-left: 200px;
+    padding: 2rem 3rem;
+    max-width: 1000px;
+}
+
+/* 文章样式 */
+.main-content h1,
+.main-content h2,
+.main-content h3 {
+    color: var(--text-primary);
+    margin: 1.5rem 0 1rem;
+    border-bottom: 2px solid var(--border-color);
+}
+
+.main-content p {
+    color: var(--text-secondary);
+    line-height: 1.6;
+    margin: 1rem 0;
+}
+
+/* 主题切换按钮 */
+.theme-toggle {
+    position: fixed;
+    top: 1rem;
+    right: 1rem;
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 5px;
+    background: var(--bg-secondary);
+    color: var(--text-primary);
+    cursor: pointer;
+    z-index: 1000;
+}
+
+/* 访问统计器 */
+.visit-stats {
+    position: fixed;
+    bottom: 1rem;
+    right: 1rem;
+    background: var(--bg-secondary);
+    padding: 0.5rem 1rem;
+    border-radius: 5px;
+    box-shadow: 0 2px 8px var(--shadow-color);
+    z-index: 1000;
+}
+
+.stat-item {
+    display: inline-block;
+    margin: 0 0.5rem;
+    color: var(--text-secondary);
+}
+
+/* 响应式设计 */
 @media (max-width: 768px) {
-  body { padding: 10px; }
-  h1 { font-size: 1.8rem; }
+    .left-nav {
+        width: 180px;
+    }
+    
+    .main-content {
+        margin-left: 180px;
+        padding: 1rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .left-nav {
+        display: none;
+    }
+    
+    .main-content {
+        margin-left: 0;
+    }
 }
