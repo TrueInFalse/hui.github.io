@@ -28,9 +28,15 @@
     <script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-bash.min.js"></script>
 </head>
 <body>
+    <div class="sidebar-sensor"></div>
     <!-- 主题切换按钮 -->
     <button class="theme-toggle" onclick="toggleTheme()">
         🌓 切换主题
+    </button>
+
+    <!-- 桌面端导航切换按钮 -->
+    <button class="nav-toggle" onclick="toggleDesktopNav()">
+        ☰
     </button>
 
     <div class="container">
@@ -46,15 +52,10 @@
         </main>
     </div>
 
-    <!-- 访问统计
+    <!-- 访问统计 -->
     <div id="visitStats" class="visit-stats">
-        <div class="stat-item">
-            <span>PV: 0</span>
-        </div>
-        <div class="stat-item">
-            <span>UV: 0</span>
-        </div>
-    </div> -->
+        <span>👀 <span id="pageViews">0</span></span>
+    </div>
 
     <!-- Markdown解析器 -->
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
@@ -74,6 +75,9 @@
     <button class="back-to-top" onclick="scrollToTop()" title="回到顶部">
         ↑
     </button>
+
+    <!-- 进度条 -->
+    <div class="progress-bar"></div>
 
 </body>
 </html>

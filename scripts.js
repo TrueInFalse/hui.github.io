@@ -17,6 +17,59 @@ const posts = [
     }
 ];
 
+// 阅读进度和位置记忆
+function handleReadingProgress(postId) {
+    // 获取内容元素
+    const content = document.getElementById('content');
+    const progressBar = document.querySelector('.progress-bar');
+    
+    // 直接恢复上次阅读位置，无需确认
+    const lastPosition = localStorage.getItem(`scroll_${postId}`);
+    if (lastPosition) {
+        window.scrollTo({
+            top: parseInt(lastPosition),
+            behavior: 'smooth'
+        });
+    }
+
+    // 监听滚动更新进度条
+    window.addEventListener('scroll', () => {
+        const totalHeight = content.offsetHeight - window.innerHeight;
+        const progress = (window.scrollY / totalHeight) * 100;
+        progressBar.style.width = `${Math.min(100, progress)}%`;
+        
+        // 保存阅读位置
+        localStorage.setItem(`scroll_${postId}`, window.scrollY.toString());
+    });
+}
+
+// 添加代码块复制功能
+function addCopyButtons() {
+    const codeBlocks = document.querySelectorAll('pre code');
+    codeBlocks.forEach((codeBlock) => {
+        const container = codeBlock.parentElement;
+        const copyButton = document.createElement('button');
+        copyButton.className = 'copy-button';
+        copyButton.textContent = '复制';
+        
+        copyButton.addEventListener('click', async () => {
+            try {
+                await navigator.clipboard.writeText(codeBlock.textContent);
+                copyButton.textContent = '已复制!';
+                setTimeout(() => {
+                    copyButton.textContent = '复制';
+                }, 2000);
+            } catch (err) {
+                console.error('复制失败:', err);
+                copyButton.textContent = '复制失败';
+            }
+        });
+        
+        container.style.position = 'relative';
+        container.appendChild(copyButton);
+    });
+}
+
 // 加载文章内容
 async function loadPost(postId) {
     try {
@@ -48,6 +101,16 @@ async function loadPost(postId) {
         
         // 手动触发 Prism.js 高亮
         Prism.highlightAll();
+        
+        // 添加复制按钮
+        addCopyButtons();
+        
+        // 重置进度条
+        const progressBar = document.querySelector('.progress-bar');
+        progressBar.style.width = '0%';
+        
+        // 初始化阅读进度
+        handleReadingProgress(postId);
     } catch (err) {
         console.error('Error loading post:', err);
         document.getElementById('content').innerHTML = `<p>加载文章失败: ${err.message}</p>`;
@@ -58,8 +121,19 @@ async function loadPost(postId) {
 function generateMenu() {
     const menu = document.getElementById('menu');
     menu.innerHTML = posts.map(post => `
-        <a href="javascript:void(0)" onclick="loadPost('${post.id}')">${post.title}</a>
+        <a href="javascript:void(0)" onclick="onMenuItemClick('${post.id}')">${post.title}</a>
     `).join('');
+}
+
+// 新增：目录项点击事件
+function onMenuItemClick(postId) {
+    loadPost(postId);
+    // 自动收起目录和遮罩（桌面端和移动端都收起）
+    const nav = document.querySelector('.left-nav');
+    const overlay = document.querySelector('.overlay');
+    nav.classList.remove('show');
+    overlay.classList.remove('show');
+    document.body.style.overflow = '';
 }
 
 // 主题切换
@@ -80,41 +154,24 @@ function setTheme(theme) {
 
 // 访问统计
 function countVisits() {
-    const now = new Date().getTime();
+    // 获取当前文章ID
+    const currentPath = window.location.hash.slice(1) || 'home';
     
-    // PV统计
-    let pageViews = localStorage.getItem('pageViews') || 0;
-    pageViews = parseInt(pageViews) + 1;
-    localStorage.setItem('pageViews', pageViews);
-
-    // UV统计
-    let visitorId = localStorage.getItem('visitorId');
-    let lastVisitTime = localStorage.getItem('lastVisitTime');
+    // 更新总PV
+    let totalViews = parseInt(localStorage.getItem('totalViews') || '0');
+    totalViews++;
+    localStorage.setItem('totalViews', totalViews);
     
-    if (!visitorId || (lastVisitTime && (now - parseInt(lastVisitTime)) > 24 * 60 * 60 * 1000)) {
-        visitorId = 'visitor_' + Math.random().toString(36).substr(2, 9);
-        localStorage.setItem('visitorId', visitorId);
-        let uniqueVisitors = localStorage.getItem('uniqueVisitors') || 0;
-        uniqueVisitors = parseInt(uniqueVisitors) + 1;
-        localStorage.setItem('uniqueVisitors', uniqueVisitors);
-    }
-    
-    localStorage.setItem('lastVisitTime', now);
-    updateVisitStats();
+    // 更新显示
+    updateVisitStats(totalViews);
 }
 
 // 更新统计显示
-function updateVisitStats() {
-    const pageViews = localStorage.getItem('pageViews') || 0;
-    const uniqueVisitors = localStorage.getItem('uniqueVisitors') || 0;
-    document.getElementById('visitStats').innerHTML = `
-        <div class="stat-item">
-            <span>PV: ${pageViews}</span>
-        </div>
-        <div class="stat-item">
-            <span>UV: ${uniqueVisitors}</span>
-        </div>
-    `;
+function updateVisitStats(views) {
+    const pageViews = document.getElementById('pageViews');
+    if (pageViews) {
+        pageViews.textContent = views;
+    }
 }
 
 // 添加回到顶部功能
@@ -135,6 +192,18 @@ window.addEventListener('scroll', () => {
     }
 });
 
+// 桌面端导航切换
+function toggleDesktopNav() {
+    const nav = document.querySelector('.left-nav');
+    const mainContent = document.querySelector('.main-content');
+    
+    // 仅切换 collapsed 类
+    nav.classList.toggle('collapsed');
+    
+    // 保存导航状态
+    localStorage.setItem('nav_collapsed', nav.classList.contains('collapsed'));
+}
+
 // 初始化页面
 document.addEventListener('DOMContentLoaded', () => {
     generateMenu();
@@ -143,6 +212,31 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // 初始化主题
     console.log('页面初始化完成');
+    
+    // 恢复导航状态
+    const navCollapsed = localStorage.getItem('nav_collapsed') === 'true';
+    if (navCollapsed) {
+        document.querySelector('.left-nav').classList.add('collapsed');
+    }
+
+    // 桌面端目录感应区
+    const sensor = document.querySelector('.sidebar-sensor');
+    const nav = document.querySelector('.left-nav');
+    const overlay = document.querySelector('.overlay');
+    if (sensor && nav && overlay) {
+        sensor.addEventListener('mouseenter', () => {
+            if (window.innerWidth > 768) {
+                nav.classList.add('show');
+                overlay.classList.add('show');
+            }
+        });
+        nav.addEventListener('mouseleave', (e) => {
+            if (window.innerWidth > 768) {
+                nav.classList.remove('show');
+                overlay.classList.remove('show');
+            }
+        });
+    }
 });
 
 // 监听系统主题变化
@@ -157,21 +251,25 @@ window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e =
 window.addEventListener('hashchange', () => {
     const hash = window.location.hash.slice(1);
     loadPost(hash);
+    countVisits();
 });
 
 // 移动端导航控制
 function toggleMenu() {
     const nav = document.querySelector('.left-nav');
     const overlay = document.querySelector('.overlay');
-    
-    if (nav.classList.contains('show')) {
+    const isShow = nav.classList.contains('show');
+    if (isShow) {
         nav.classList.remove('show');
         overlay.classList.remove('show');
         document.body.style.overflow = '';
     } else {
         nav.classList.add('show');
         overlay.classList.add('show');
-        document.body.style.overflow = 'hidden';
+        // 只在移动端禁止滚动
+        if (window.innerWidth <= 768) {
+            document.body.style.overflow = 'hidden';
+        }
     }
 }
 
