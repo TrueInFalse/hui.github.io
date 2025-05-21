@@ -36,20 +36,33 @@ body {
 .container {
     display: flex;
     min-height: 100vh;
+    width: 100%;
+    position: relative;
 }
 
-/* 左侧导航 */
+/* 左侧导航样式修改 */
 .left-nav {
     position: fixed;
-    left: 0;
-    top: 50%;
-    transform: translateY(-50%);
+    left: -240px;
+    top: 0;
+    height: 100vh;
     width: 200px;
     background: var(--bg-secondary);
-    padding: 1.5rem 1rem;
+    padding: 4rem 1rem 1rem;
     overflow-y: auto;
-    max-height: 90vh;
     box-shadow: 2px 0 8px var(--shadow-color);
+    transition: left 0.3s;
+    z-index: 1000;
+    box-sizing: border-box;
+}
+
+.left-nav.show {
+    left: 0;
+}
+
+/* 桌面端导航收起状态 */
+.left-nav.collapsed {
+    transform: translateX(-200px);
 }
 
 .left-nav h2 {
@@ -70,11 +83,14 @@ body {
     color: var(--link-hover);
 }
 
-/* 主内容区域 */
+/* 主内容区域调整 */
 .main-content {
     margin-left: 200px;
     padding: 2rem 3rem;
     max-width: 1000px;
+    transition: margin-left 0.3s ease;
+    flex: 1;
+    overflow-y: visible; /* 确保内容可以滚动 */
 
     /* 标题样式 */
     h1, h2, h3, h4, h5, h6 {
@@ -181,6 +197,11 @@ body {
     }
 }
 
+/* 主内容区域在导航收起时的样式 */
+.left-nav.collapsed ~ .main-content {
+    margin-left: 0;
+}
+
 /* 文章样式 */
 .main-content h1,
 .main-content h2,
@@ -194,6 +215,31 @@ body {
     color: var(--text-secondary);
     line-height: 1.6;
     margin: 1rem 0;
+}
+
+/* 桌面端导航切换按钮样式 */
+.nav-toggle {
+    position: fixed;
+    left: 1rem;
+    top: 1rem;
+    z-index: 1001;
+    width: 40px;
+    height: 40px;
+    border: none;
+    border-radius: 50%;
+    background: var(--bg-secondary);
+    color: var(--text-primary);
+    cursor: pointer;
+    box-shadow: 0 2px 4px var(--shadow-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+}
+
+/* 桌面端导航收起时按钮位置调整 */
+.left-nav.collapsed ~ .nav-toggle {
+    left: 1rem;
 }
 
 /* 主题切换按钮 */
@@ -210,33 +256,56 @@ body {
     z-index: 1000;
 }
 
-/* 访问统计器 */
+/* 访问统计样式 */
 .visit-stats {
     position: fixed;
-    bottom: 1rem;
+    top: 4rem;  /* 放在主题切换按钮下方，留出间距 */
     right: 1rem;
+    padding: 0.4rem 0.8rem;
+    border-radius: 4px;
     background: var(--bg-secondary);
-    padding: 0.5rem 1rem;
-    border-radius: 5px;
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    opacity: 0.8;
     box-shadow: 0 2px 8px var(--shadow-color);
-    z-index: 1000;
+    z-index: 999;
+    transition: opacity 0.3s;
 }
 
-.stat-item {
-    display: inline-block;
-    margin: 0 0.5rem;
-    color: var(--text-secondary);
+.visit-stats:hover {
+    opacity: 1;
+}
+
+@media screen and (max-width: 768px) {
+    .visit-stats {
+        font-size: 0.8rem;
+        padding: 0.3rem 0.6rem;
+        top: 3.5rem;  /* 移动端稍微调整间距 */
+    }
 }
 
 /* 响应式设计 */
 @media (max-width: 768px) {
     .left-nav {
-        width: 180px;
+        width: 240px;
+        left: -240px;
     }
     
     .main-content {
         margin-left: 180px;
         padding: 1rem;
+    }
+
+    .theme-toggle {
+        padding: 0.4rem 0.8rem;
+        font-size: 0.9rem;
+    }
+
+    .back-to-top {
+        bottom: 1rem;  /* 确保在底部 */
+        right: 1rem;
+        width: 36px;   /* 移动端稍微小一点 */
+        height: 36px;
     }
 }
 
@@ -283,8 +352,11 @@ body {
     left: 0;
     right: 0;
     bottom: 0;
-    background: rgba(0, 0, 0, 0.5);
+    background: rgba(0, 0, 0, 0.3);
     z-index: 999;
+}
+.overlay.show {
+    display: block;
 }
 
 /* 进度条 */
@@ -378,18 +450,7 @@ body {
         padding: 0.4rem 0.8rem;
     }
 
-    /* 访问统计位置调整 */
-    /* .visit-stats {
-        position: fixed;
-        bottom: 0;
-        right: 0;
-        left: 0;
-        background: var(--bg-secondary);
-        padding: 0.5rem;
-        border-radius: 0;
-        text-align: center;
-        box-shadow: 0 -2px 8px var(--shadow-color);
-    } */
+
 
     /* 只在移动端显示回到顶部按钮 */
     .back-to-top {
@@ -437,10 +498,53 @@ body {
 
     /* 调整访问统计样式 */
     .visit-stats {
-        font-size: 0.8rem;
+        top: 3.2rem;  /* 更小屏幕时再微调 */
+        font-size: 0.75rem;
     }
 
     .stat-item {
         margin: 0 0.3rem;
+    }
+}
+
+/* 复制按钮样式 */
+.copy-button {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
+    padding: 0.3rem 0.6rem;
+    background: var(--bg-primary);
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    color: var(--text-secondary);
+    font-size: 0.8rem;
+    cursor: pointer;
+    opacity: 0;
+    transition: opacity 0.2s;
+}
+
+pre:hover .copy-button {
+    opacity: 1;
+}
+
+.copy-button:hover {
+    background: var(--bg-secondary);
+    color: var(--link-color);
+}
+
+/* 侧边栏传感器 */
+.sidebar-sensor {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 12px;
+    height: 100vh;
+    z-index: 1100;
+    background: transparent;
+    display: none;
+}
+@media (min-width: 769px) {
+    .sidebar-sensor {
+        display: block;
     }
 }
