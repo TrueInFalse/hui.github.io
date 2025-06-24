@@ -14,6 +14,11 @@ const posts = [
         id: 'interview-yunzhi-2504',
         title: '2504暑期云智面试',
         file: 'interview-yunzhi-2504.md'
+    },
+    {
+        id:'all-inters',
+        title:'所有面经',
+        file: 'all-inters.md'
     }
 ];
 
