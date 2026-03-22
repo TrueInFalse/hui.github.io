@@ -1,0 +1,4 @@
+﻿User-agent: *
+Allow: /
+
+Sitemap: https://trueinfalse.github.io/hui.github.io/sitemap.xml

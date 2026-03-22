@@ -1,0 +1,90 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>文章列表 | Su Xiaoyao</title>
+    <meta name="description" content="按时间与标签整理的文章列表，包含面经复盘、项目记录与个人成长思考。">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="文章列表 | Su Xiaoyao">
+    <meta property="og:description" content="持续更新的面经与项目复盘文章列表。">
+    <meta property="og:url" content="https://trueinfalse.github.io/hui.github.io/blog.html">
+    <link rel="canonical" href="https://trueinfalse.github.io/hui.github.io/blog.html">
+    <link rel="icon" href="assets/icons/favicon.svg" type="image/svg+xml">
+    <script>
+        (function () {
+            try {
+                var saved = localStorage.getItem("site-theme");
+                if (saved === "light" || saved === "dark") {
+                    document.documentElement.setAttribute("data-theme", saved);
+                    return;
+                }
+            } catch (error) {
+                // noop
+            }
+            var prefersDark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
+            document.documentElement.setAttribute("data-theme", prefersDark ? "dark" : "light");
+        })();
+    </script>
+    <link rel="stylesheet" href="assets/css/main.css">
+</head>
+<body data-page="blog" data-root-path="./">
+<div class="site-shell">
+    <a class="skip-link" href="#main-content">跳到主要内容</a>
+
+    <header class="site-header">
+        <div class="container site-header-inner">
+            <a class="brand" href="index.html" aria-label="返回首页">
+                <span class="brand-badge" aria-hidden="true">SX</span>
+                <span>Su Xiaoyao</span>
+            </a>
+
+            <nav class="site-nav" aria-label="主导航" data-nav>
+                <a href="index.html">首页</a>
+                <a href="index.html#projects">项目</a>
+                <a href="blog.html">文章</a>
+                <a href="index.html#about">关于我</a>
+                <a href="index.html#contact">联系</a>
+            </nav>
+
+            <div class="header-actions">
+                <button class="icon-button nav-toggle" type="button" aria-label="展开导航" aria-expanded="false" data-nav-toggle>
+                    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                        <path d="M4 7H20M4 12H20M4 17H20" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                    </svg>
+                </button>
+                <button class="icon-button" type="button" data-theme-toggle aria-label="切换主题">
+                    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                        <path d="M12 3V5.3M12 18.7V21M4.93 4.93L6.56 6.56M17.44 17.44L19.07 19.07M3 12H5.3M18.7 12H21M4.93 19.07L6.56 17.44M17.44 6.56L19.07 4.93" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                        <circle cx="12" cy="12" r="3.7" stroke="currentColor" stroke-width="1.5"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main id="main-content" class="main blog-main">
+        <div class="container">
+            <section class="blog-intro" data-reveal>
+                <h1>文章列表</h1>
+                <p>这里集中展示面经、项目复盘与学习记录。新增文章时，只需增加 `posts/*.md` 并更新 `posts/index.json`。</p>
+                <div class="filter-bar" id="blog-tags" aria-label="文章标签过滤"></div>
+            </section>
+
+            <section class="blog-list" id="blog-list" aria-live="polite"></section>
+        </div>
+    </main>
+
+    <footer class="site-footer">
+        <div class="container">
+            <p>© <span data-current-year></span> Su Xiaoyao · 持续更新中。</p>
+        </div>
+    </footer>
+
+    <button class="back-to-top" type="button" data-back-to-top aria-label="回到顶部">↑</button>
+</div>
+
+<script src="assets/js/common.js" defer></script>
+<script src="assets/js/blog.js" defer></script>
+</body>
+</html>
