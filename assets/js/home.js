@@ -29,7 +29,7 @@
             .join("");
         const dateText = SiteUtils.formatDate(post.date);
         return `
-            <article class="post-card" data-reveal>
+            <article class="post-card">
                 <h3><a href="posts/${post.slug}.html">${post.title}</a></h3>
                 <p class="post-card-meta">${dateText}${post.readingMinutes ? ` · 约 ${post.readingMinutes} 分钟` : ""}</p>
                 <p>${post.summary || ""}</p>
@@ -57,3 +57,4 @@
 
     init();
 })();
+
