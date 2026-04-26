@@ -1,9 +1,10 @@
 ﻿# 个人网站（GitHub Pages）
 
-这是一个纯静态个人网站，定位为：
-- 个人成长记录
-- 技术项目展示
-- 博客/面经分享
+这是一个纯静态个人网站，定位为一个简洁、克制、便于长期保留的个人主页：
+- 少量个人介绍
+- 精选项目 / 作品入口
+- Notes / 面经 / 维护记录入口
+- Contact 与 GitHub 链接
 
 站点基于原生 `HTML/CSS/JS + Markdown`，不依赖重型框架，方便长期维护和 GitHub Pages 部署。
 
@@ -15,7 +16,7 @@
 
 ```text
 .
-├─ index.html                 # 首页（Hero / About / Projects / Skills / Contact）
+├─ index.html                 # 首页（Intro / Selected / About / Projects / Notes / Contact）
 ├─ blog.html                  # 文章列表页（标签筛选）
 ├─ posts/
 │  ├─ *.md                    # 文章正文 Markdown
@@ -43,6 +44,13 @@ python -m http.server 8080
 
 然后访问：
 - http://localhost:8080/
+
+## 首页维护原则
+
+- 首页只放少量核心信息，不做完整履历页或复杂作品集
+- 暂时不重要的内容先隐藏或移动到文章 / archive，而不是堆在首页
+- Projects 只保留精选条目，Notes 只展示少量精选文章
+- 深色/浅色主题切换、响应式导航、返回顶部保持轻量实现
 
 ## 内容更新方式
 
